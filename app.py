@@ -1,27 +1,20 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, render_template_string
 from flask_cors import CORS
-from flask import render_template_string
-from xhtml2pdf import pisa
 
 import firebase_admin
 from firebase_admin import credentials, auth
 
 import mysql.connector
 import os
-from xhtml2pdf import pisa
 from datetime import datetime, timedelta
+
+from dotenv import load_dotenv
+load_dotenv()
+
 # PDF + QR
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
-import qrcode
-
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-# Platypus (Modern PDF Design)
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -34,32 +27,39 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 
-from datetime import datetime
+import qrcode
 import smtplib
 from email.message import EmailMessage
 
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 import base64
-
 # ---------------- APP SETUP ----------------
 app = Flask(__name__)
 
 CORS(
     app,
     resources={r"/api/*": {
-        "origins": ["http://localhost:5500", "http://127.0.0.1:5500"]
+        "origins": [
+            "http://localhost:5500",
+            "http://127.0.0.1:5500",
+            "https://your-frontend-site.netlify.app",
+            "https://surya-wd.github.io"
+        ]
     }},
     supports_credentials=True,
     allow_headers=["Authorization", "Content-Type"],
     methods=["GET", "POST", "OPTIONS"]
 )
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 # ---------------- FIREBASE INIT ----------------
-cred = credentials.Certificate(os.path.join(BASE_DIR, "firebase_key.json"))
+firebase_json = os.getenv("FIREBASE_CREDENTIALS")
+if not firebase_json:
+    raise ValueError("FIREBASE_CREDENTIALS is missing")
+
+cred_dict = json.loads(firebase_json)
+
 if not firebase_admin._apps:
+    cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
     
     
@@ -215,11 +215,10 @@ def confirm_booking():
     generate_ticket_pdf_and_send_email(ticket_id)
 
     return jsonify({
-        "success": True,
-        "ticket_id": ticket_id,
-        "download_url": f"http://127.0.0.1:5000/api/ticket-pdf/{ticket_id}"
-    }), 201
-
+    "success": True,
+    "ticket_id": ticket_id,
+    "download_url": f"{request.host_url}api/ticket-pdf/{ticket_id}"
+}), 201
 # =========================================================
 # BOOKED SLOTS
 # =========================================================
