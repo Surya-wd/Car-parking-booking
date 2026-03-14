@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Slot Booking</title>
+  <link rel="stylesheet" href="../css/slot.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <h2>ParkEase</h2>
+
+    <div class="user-info" id="userInfo">
+      <img id="userAvatar" src="../html/user.png" alt="User Avatar" />
+
+      <div id="accountDropdown" class="account-dropdown hidden">
+        <p><strong>Email:</strong></p>
+        <p id="dropdownEmail"></p>
+
+        <p><strong>UID:</strong></p>
+        <p id="dropdownUID"></p>
+
+        <hr />
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page">
+
+    <div class="legend">
+      <div><span class="dot free"></span> Available</div>
+      <div><span class="dot booked"></span> Booked</div>
+      <div><span class="dot selected"></span> Selected</div>
+    </div>
+
+    <div class="slots" id="slots"></div>
+
+    <footer>
+      <p>Selected Slot: <strong id="selectedSlot">—</strong></p>
+      <button id="confirmBtn" disabled>Book Now</button>
+    </footer>
+
+  </div>
+
+  <div class="monthly-plan-box">
+  <h2>Your Monthly Package</h2>
+
+  <p>
+    <strong>Location:</strong>
+    <span id="showLocation"></span>
+  </p>
+
+  <p>
+    <strong>Selected Plan:</strong>
+    <span id="showPackage"></span> Months
+  </p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+  (function () {
+    emailjs.init("wfIFNQSGX7y_iPDDf");
+  })();
+</script>
+
+  <script type="module" src="../js/slot.js"></script>
+</body>
+</html>

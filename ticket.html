@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parking Ticket</title>
+  <link rel="stylesheet" href="../css/ticket.css">
+</head>
+<body>
+
+<div id="ticketModal" class="ticket-modal">
+  <div class="ticket">
+
+    <div class="ticket-header">
+      <h2>🚗 Parking Ticket</h2>
+      <span id="ticketId"></span>
+    </div>
+
+    <div class="ticket-body">
+      <p><strong>Email:</strong> <span id="userName"></span></p>
+      <p><strong>Vehicle No:</strong> <span id="vehicleNo"></span></p>
+      <p><strong>Slot:</strong> <span id="slotNo"></span></p>
+      <p><strong>Date:</strong> <span id="date"></span></p>
+      <p><strong>Time:</strong> <span id="time"></span></p>
+    </div>
+
+    <!-- ✅ QR CODE MOVED INSIDE TICKET -->
+    <div class="qr-section">
+      <p><strong>Scan to Verify Ticket</strong></p>
+      <div id="qrcode"></div>
+    </div>
+
+    <div class="ticket-footer">
+      <button class="btn print" id="printBtn">Print</button>
+      <button class="btn download" id="downloadPdfBtn">Download PDF</button>
+      <button class="btn close" id="closeTicketBtn">Close</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- QR library MUST be before ticket.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script type="module" src="../js/ticket.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function () {
+    emailjs.init("wfIFNQSGX7y_iPDDf"); // ✅ your PUBLIC KEY
+  })();
+</script>
+
+</body>
+</html>

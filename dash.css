@@ -1,0 +1,613 @@
+/* ===== MODERN FONT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(1200px circle at 10% 10%, #1e293b, transparent 40%),
+    radial-gradient(900px circle at 90% 90%, #020617, transparent 45%),
+    linear-gradient(135deg, #020617, #020617);
+  color: white;
+}
+
+/* ==================================
+   NAVBAR (GLASS + FLOAT)
+================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 72px;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  z-index: 1000;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* LOGO */
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.logo span {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* NAV LINKS */
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.navbar nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+  font-size: 14px;
+  position: relative;
+  transition: 0.3s;
+}
+
+.navbar nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #3b82f6;
+  transition: 0.3s;
+}
+
+.navbar nav a:hover::after {
+  width: 100%;
+}
+
+/* ==================================
+   AVATAR + DROPDOWN (3D)
+================================== */
+.account-box {
+  position: relative;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #3b82f6;
+  object-fit: cover;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.25);
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: rgba(17,24,39,0.95);
+  backdrop-filter: blur(16px);
+  border-radius: 14px;
+  min-width: 190px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.35s ease;
+}
+
+.account-box.active .dropdown {
+  max-height: 320px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown p {
+  padding: 14px;
+  font-size: 13px;
+  color: #9ca3af;
+  border-bottom: 1px solid #1f2937;
+  text-align: center;
+  pointer-events: none;
+}
+
+.dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  padding: 14px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.3s;
+}
+
+.dropdown button:hover {
+  background: #2563eb;
+}
+
+/* ==================================
+   PROFILE MODAL
+================================== */
+.profile-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.profile-card {
+  background: rgba(15,23,42,0.9);
+  backdrop-filter: blur(18px);
+  padding: 28px;
+  border-radius: 18px;
+  width: 330px;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.9);
+}
+
+/* ==================================
+   PROFILE SECTION
+================================== */
+.profile-section {
+  padding: 130px 50px;
+  min-height: 100vh;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.profile-row span {
+  color: #9ca3af;
+}
+
+/* ==================================
+   HERO (PARALLAX FEEL)
+================================== */
+.hero {
+  height: 100vh;
+  background:
+    linear-gradient(rgba(11,18,32,0.85), rgba(11,18,32,0.85)),
+    url("https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1400&q=80")
+    center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 120px 60px 0;
+}
+
+.hero-content {
+  max-width: 560px;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.hero-content p {
+  font-size: 16px;
+  color: #cbd5f5;
+  margin-bottom: 30px;
+}
+
+.primary-btn {
+  position: relative;
+  padding: 16px 34px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  border: none;
+
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  box-shadow:
+    0 20px 50px rgba(56,189,248,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  transition: all 0.35s ease;
+  overflow: hidden;
+}
+
+/* Glow animation */
+.primary-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 60%);
+  opacity: 0;
+  transition: 0.35s;
+}
+
+.primary-btn:hover::after {
+  opacity: 1;
+}
+
+.primary-btn:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow:
+    0 30px 70px rgba(56,189,248,0.7);
+}
+#bookNowBtn {
+  position: relative;
+  padding: 16px 36px;
+  border-radius: 14px;
+  border: none;
+
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  box-shadow:
+    0 18px 45px rgba(56,189,248,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+
+  transition: all 0.35s ease;
+}
+
+/* Glow layer */
+#bookNowBtn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.6),
+    rgba(59,130,246,0.3),
+    rgba(255,255,255,0.6)
+  );
+  opacity: 0;
+  filter: blur(10px);
+  transition: 0.4s;
+}
+
+/* Shine effect */
+#bookNowBtn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: rgba(255,255,255,0.35);
+  transform: rotate(25deg);
+  transition: 0.6s;
+}
+
+/* Hover animation */
+#bookNowBtn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 30px 70px rgba(56,189,248,0.8);
+}
+
+#bookNowBtn:hover::before {
+  opacity: 1;
+}
+
+#bookNowBtn:hover::after {
+  left: 130%;
+}
+
+/* Click (press) effect */
+#bookNowBtn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow:
+    0 12px 30px rgba(56,189,248,0.6);
+}
+
+/* Mobile friendly */
+@media (max-width: 600px) {
+  #bookNowBtn {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+
+/* ==================================
+   SEARCH BAR (FLOATING)
+================================== */
+.search-bar {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(17,24,39,0.9);
+  backdrop-filter: blur(18px);
+  padding: 18px;
+  border-radius: 18px;
+  display: flex;
+  gap: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+}
+
+.tab {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab.active {
+  background: #2563eb;
+}
+
+.search-bar input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* ==================================
+   HOME CARDS (3D)
+================================== */
+.home-section {
+  padding: 120px 50px 80px;
+  text-align: center;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  padding: 36px;
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+  transition: 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-10px) rotateX(4deg);
+  box-shadow: 0 40px 100px rgba(59,130,246,0.5);
+}
+
+/* ==================================
+   ABOUT
+================================== */
+.about-section {
+  padding: 100px 50px;
+  background: rgba(255,255,255,0.02);
+  text-align: center;
+}
+
+/* ==================================
+   FOOTER
+================================== */
+.footer {
+  padding: 50px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* ==================================
+   RESPONSIVE
+================================== */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .navbar nav {
+    display: none;
+  }
+
+  .hero {
+    padding: 140px 20px 0;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 38px;
+  }
+
+  .search-bar {
+    flex-wrap: wrap;
+    width: 90%;
+  }
+
+  .home-section,
+  .about-section {
+    padding: 80px 20px;
+  }
+}
+/* ===============================
+   🌗 THEME VARIABLES
+================================ */
+:root {
+  --bg-main: #020617;
+  --bg-glass: rgba(17,24,39,0.92);
+
+  --text-main: #f9fafb;
+  --text-heading: #ffffff;
+  --text-muted: #9ca3af;
+
+  --border-soft: rgba(255,255,255,0.12);
+  --card-bg: rgba(255,255,255,0.08);
+}
+
+/* ☀️ LIGHT MODE */
+body[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-glass: rgba(255,255,255,0.95);
+
+  --text-main: #0f172a;
+  --text-heading: #020617;
+  --text-muted: #475569;
+
+  --border-soft: rgba(0,0,0,0.12);
+  --card-bg: rgba(0,0,0,0.05);
+}
+
+/* 🖥 SYSTEM LIGHT */
+@media (prefers-color-scheme: light) {
+  body[data-theme="system"] {
+    --bg-main: #f8fafc;
+    --bg-glass: rgba(255,255,255,0.95);
+
+    --text-main: #0f172a;
+    --text-heading: #020617;
+    --text-muted: #475569;
+
+    --border-soft: rgba(0,0,0,0.12);
+    --card-bg: rgba(0,0,0,0.05);
+  }
+}
+
+/* 🌙 SYSTEM DARK */
+@media (prefers-color-scheme: dark) {
+  body[data-theme="system"] {
+    --bg-main: #020617;
+    --bg-glass: rgba(17,24,39,0.92);
+
+    --text-main: #f9fafb;
+    --text-heading: #ffffff;
+    --text-muted: #9ca3af;
+
+    --border-soft: rgba(255,255,255,0.12);
+    --card-bg: rgba(255,255,255,0.08);
+  }
+}
+body {
+  color: var(--text-main);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+h1, h2, h3, h4 {
+  color: var(--text-heading);
+}
+
+p, span, a {
+  color: var(--text-main);
+}
+
+.navbar a {
+  color: var(--text-main);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+select,
+input,
+button {
+  color: var(--text-main);
+  background: transparent;
+}
+
+.dropdown,
+.card,
+.search-bar {
+  background: var(--bg-glass);
+  color: var(--text-main);
+}
+body[data-theme="light"] img.icon {
+  filter: invert(1);
+}
+
+
+/* =========================================
+   ✅ FIX SELECT LOCATION + PACKAGE DROPDOWN
+   ========================================= */
+
+.search-bar select {
+  background: rgba(17, 24, 39, 0.95) !important;
+  color: white !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+
+  transition: 0.3s ease;
+}
+
+/* Hover */
+.search-bar select:hover {
+  border-color: #3b82f6;
+}
+
+/* Focus */
+.search-bar select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.55);
+}
+
+/* Dropdown Options */
+.search-bar select option {
+  background: #111827 !important;
+  color: white !important;
+}
+
+.search-bar input {
+  background: rgba(17, 24, 39, 0.85) !important;
+  color: white !important;
+
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255,255,255,0.55);
+}
+
+.search-bar select {
+  backdrop-filter: blur(12px);
+}

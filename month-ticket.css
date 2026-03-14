@@ -1,0 +1,153 @@
+/* ================================
+   GOOGLE FONT
+================================ */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+/* ================================
+   GLOBAL RESET
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ================================
+   BODY BACKGROUND
+================================ */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  padding: 20px;
+}
+
+/* ================================
+   MAIN CONTAINER
+================================ */
+.ticket-container {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+/* ================================
+   TITLE
+================================ */
+.ticket-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+}
+
+/* ================================
+   TICKET BOX (3D CARD)
+================================ */
+.ticket-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+
+  border-radius: 20px;
+  padding: 30px;
+
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 12px rgba(255, 255, 255, 0.15);
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  transform: perspective(1000px) rotateX(0deg);
+  transition: all 0.35s ease;
+}
+
+/* ================================
+   3D HOVER EFFECT
+================================ */
+.ticket-box:hover {
+  transform: perspective(1000px) rotateX(6deg) translateY(-8px);
+  box-shadow: 
+    0 25px 55px rgba(0, 0, 0, 0.55),
+    inset 0 0 18px rgba(255, 255, 255, 0.25);
+}
+
+/* ================================
+   TEXT DETAILS
+================================ */
+.ticket-box p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 10px 0;
+  text-align: left;
+}
+
+/* Highlight Values */
+.ticket-box span {
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+/* ================================
+   DIVIDER LINE
+================================ */
+.ticket-box hr {
+  border: none;
+  height: 1px;
+  margin: 18px 0;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ================================
+   DOWNLOAD BUTTON (MODERN 3D)
+================================ */
+#downloadBtn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: white;
+
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
+
+  transition: all 0.3s ease;
+}
+
+/* Button Hover */
+#downloadBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(56, 189, 248, 0.65);
+}
+
+/* Button Click */
+#downloadBtn:active {
+  transform: scale(0.96);
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+@media (max-width: 600px) {
+  .ticket-box {
+    padding: 22px;
+  }
+
+  .ticket-container h1 {
+    font-size: 1.6rem;
+  }
+
+  #downloadBtn {
+    font-size: 15px;
+  }
+}

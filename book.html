@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkIn - Parking Made Easy</title>
+    <link rel="stylesheet" href="../css/book.css" />
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Park<span>Smart</span></div>
+    <nav>
+  <div class="user-info" id="userInfo">
+    <img
+      id="userAvatar"
+      src="user.png"
+      alt="avatar"
+      style="width:40px;height:40px;border-radius:50%;cursor:pointer;"
+    />
+    <div id="accountDropdown" class="account-dropdown hidden">
+      <p><strong>Email:</strong></p>
+      <p id="dropdownEmail"></p>
+      <p><strong>UID:</strong></p>
+      <p id="dropdownUID"></p>
+      <hr />
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div></nav>
+    
+</header>
+
+<section class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>Find Safe & Secure Parking</h1>
+        <p>Set up secure parking solutions to ensure smooth customer experiences with reliable locations.</p>
+
+        <div class="search-box">
+            <h3>Book Your Parking</h3>
+
+            <div class="form-group">
+    <label>Location</label>
+    <select id="location" required>
+  <option value="">Select Parking Location</option>
+  <option value="Prozone Mall">Prozone Mall</option>
+  <option value="Lakshmi Parking (Gandhipuram)">Lakshmi Parking (Gandhipuram)</option>
+  <option value="Ukkadam">Ukkadam</option>
+  <option value="Town Hall">Town Hall</option>
+</select>
+
+</div>
+
+
+            <div class="form-group">
+                <label>Car Number</label>
+                <input type="text" id="vehicle" placeholder="e.g. AB12 CD 3456" required />
+            </div>
+
+            
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="date" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Booking Time</label>
+                    <input type="time" id="time" required />
+                </div>
+            </div>
+
+            <button id="checkAvailabilityBtn" class="search-btn">Check Availability</button>
+        </div>
+    </div>
+</section>
+
+
+    
+<script type="module" src="../js/book.js"></script>
+<script type="module" src="../js/firebase.js"></script>
+
+</body>
+</html>
