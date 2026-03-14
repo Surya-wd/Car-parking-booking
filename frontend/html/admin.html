@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+
+    <button onclick="showBookings()">Bookings</button>
+
+    <!-- ✅ NEW MONTHLY BOOKINGS BUTTON -->
+    <button onclick="showMonthlyBookings()">Monthly Bookings</button>
+
+    <button onclick="showCustomers()">Customers</button>
+
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <h1 id="pageTitle">Dashboard</h1>
+
+    <!-- BOOKINGS -->
+    <div id="bookingsSection" class="table-container" style="display:none;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>User UID</th>
+            <th>Slot</th>
+            <th>Vehicle</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="bookingsTable">
+          <tr><td colspan="7">Loading bookings...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+   <!-- ✅ MONTHLY BOOKINGS -->
+<div id="monthlyBookingsSection" class="table-container" style="display:none;">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User UID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Vehicle</th>
+        <th>Location</th>
+        <th>Package</th>
+        <th>Amount</th>
+        <th>Start</th>
+        <th>End</th>
+
+        <!-- ✅ NEW COLUMN -->
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="monthlyBookingsTable">
+      <tr><td colspan="11">Loading monthly bookings...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    <!-- CUSTOMERS -->
+    <div id="customersSection" class="table-container" style="display:none;">
+      <table>
+        <thead>
+          <tr>
+            <th>UID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+
+        <tbody id="customersTable">
+          <tr><td colspan="4">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

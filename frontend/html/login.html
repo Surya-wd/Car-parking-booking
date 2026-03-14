@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Park Smart Login</title>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+
+  <div class="login-container">
+
+    <!-- LEFT IMAGE -->
+    <div class="login-image">
+      <img src="im.jpg" alt="Park Smart Car">
+    </div>
+
+    <!-- RIGHT LOGIN FORM -->
+    <div class="login-form">
+      <div class="login-header">
+        <h2>Sign in to System</h2>
+        <p>PARK SMART</p>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Email Address" required>
+        <input type="password" id="password" placeholder="Password" required>
+
+        <div class="remember">
+          <div>
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember me</label>
+          </div>
+          <a href="#" id="forgotPassword">Forgot password?</a>
+
+        </div>
+
+        <p id="error-msg" style="color:red;font-size:13px;"></p>
+
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+
+      <!-- DIVIDER -->
+      <div style="margin:20px 0;text-align:center;color:#999;">
+        OR
+      </div>
+
+      <!-- GOOGLE LOGIN -->
+      <button id="googleLoginBtn" class="google-btn">
+        <img
+          src="https://developers.google.com/identity/images/g-logo.png"
+          width="18"
+          alt="Google"
+        />
+        Sign in with Google
+      </button>
+
+      <p class="signup-text">
+        Not registered yet? <a href="signup.html">Create an Account</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script type="module" src="../js/login.js"></script>
+
+</body>
+</html>

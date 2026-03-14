@@ -1,0 +1,128 @@
+.ticket-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 2, 45, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ticket {
+  width: 380px;
+  background: rgba(11, 3, 41, 0.6);
+  border-radius: 20px;
+  padding: 25px 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  color: #e0f2fe;
+  font-family: "Poppins", sans-serif;
+}
+
+.ticket-header {
+  text-align: center;
+  border-bottom: 2px dashed rgba(255,255,255,0.2);
+  padding-bottom: 12px;
+}
+
+.ticket-header h2 {
+  color: #22d3ee;
+  margin: 0;
+}
+
+.ticket-body {
+  margin: 20px 0;
+}
+
+.ticket-body p {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.ticket-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.print {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+}
+
+.btn.download {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+}
+
+.btn.close {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+}
+
+/* ================= QR CODE (ADDED — NO EXISTING CHANGE) ================= */
+
+.qr-section {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.qr-section p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #a5f3fc;
+}
+
+#qrcode {
+  display: flex;
+  justify-content: center;
+}
+
+#qrcode img {
+  width: 120px;
+  height: 120px;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+/* ================= PRINT MODE ================= */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .ticket, .ticket * {
+    visibility: visible;
+  }
+
+  .ticket {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    color: #000;
+    box-shadow: none;
+  }
+
+  .ticket-modal {
+    background: none;
+    backdrop-filter: none;
+  }
+
+  /* Optional: Hide QR on print (remove if you want it printed) */
+  /* .qr-section {
+    display: none;
+  } */
+}
