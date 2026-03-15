@@ -149,12 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
             })
           });
 
-          const data = await res.json();
+          const text = await res.text();
+console.log("RAW confirm-booking response:", text);
 
-          if (!res.ok) {
-            throw new Error(data.error || "Booking failed");
-          }
+let data;
+try {
+  data = JSON.parse(text);
+} catch (e) {
+  throw new Error("Server returned invalid response");
+}
 
+if (!res.ok) {
+  throw new Error(data.error || "Booking failed");
+}
           console.log("✅ Booking Success:", data);
 
           localStorage.setItem("ticketData", JSON.stringify({
