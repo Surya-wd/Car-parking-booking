@@ -368,7 +368,6 @@ def ticket_pdf(ticket_id):
 # =========================================================
 @app.route("/api/confirm-monthly-booking", methods=["POST"])
 def confirm_monthly_booking():
-
     decoded, error = verify_token()
     if error:
         return jsonify({"error": error[0]}), error[1]
@@ -378,7 +377,6 @@ def confirm_monthly_booking():
     if not data:
         return jsonify({"error": "No data received"}), 400
 
-    # Validate required fields
     required_fields = [
         "customer_name",
         "vehicle_no",
@@ -396,7 +394,6 @@ def confirm_monthly_booking():
         db = get_db()
         cursor = db.cursor()
 
-        # ✅ Ensure user exists (Fix foreign key issue)
         cursor.execute(
             "SELECT firebase_uid FROM users WHERE firebase_uid = %s",
             (decoded["uid"],)
@@ -405,22 +402,17 @@ def confirm_monthly_booking():
 
         if not existing_user:
             user_email = get_user_email(decoded["uid"])
-
             cursor.execute("""
                 INSERT INTO users (firebase_uid, email)
                 VALUES (%s, %s)
             """, (decoded["uid"], user_email))
-
             db.commit()
 
-        # ✅ Get user email (for monthly booking table)
         user_email = get_user_email(decoded["uid"])
 
-        # ✅ Calculate start and end date
         start_date = datetime.now().date()
         end_date = start_date + timedelta(days=int(data.get("package_months")) * 30)
 
-        # ✅ Insert monthly booking
         cursor.execute("""
             INSERT INTO monthly_bookings
             (firebase_uid, customer_name, email, phone_no, vehicle_no, location,
@@ -448,7 +440,6 @@ def confirm_monthly_booking():
         cursor.close()
         db.close()
 
-        # Generate PDF + Send Email
         generate_monthly_ticket_pdf_and_send_email(monthly_id)
 
         return jsonify({
