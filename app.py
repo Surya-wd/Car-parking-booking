@@ -207,9 +207,6 @@ Your parking booking is confirmed.<br><br>
 # =========================================================
 @app.route("/api/confirm-booking", methods=["POST", "OPTIONS"])
 def confirm_booking():
-    if request.method == "OPTIONS":
-        return jsonify({"ok": True}), 200
-
     try:
         decoded, error = verify_token()
         if error:
@@ -278,9 +275,6 @@ def confirm_booking():
 # =========================================================
 @app.route("/api/booked-slots", methods=["GET", "OPTIONS"])
 def booked_slots():
-    if request.method == "OPTIONS":
-        return jsonify({"ok": True}), 200
-
     try:
         date = request.args.get("date")
         location = request.args.get("location")
