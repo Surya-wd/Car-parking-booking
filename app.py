@@ -83,12 +83,12 @@ brevo_api = sib_api_v3_sdk.TransactionalEmailsApi(
 # ---------------- MYSQL CONFIG ----------------
 db_config = {
     "host": os.getenv("DB_HOST"),
+    "port": int(os.getenv("DB_PORT", 3306)),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
     "database": os.getenv("DB_NAME"),
     "autocommit": True
 }
-
 
 def get_db():
     return mysql.connector.connect(**db_config)
