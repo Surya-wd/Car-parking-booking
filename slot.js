@@ -67,28 +67,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ---------------- LOAD BOOKED SLOTS ---------------- */
- async function loadBookedSlots() {
-  try {
-    const url = `${API_BASE}/api/booked-slots?date=${encodeURIComponent(bookingData.date)}&location=${encodeURIComponent(bookingData.location)}`;
+  async function loadBookedSlots() {
+    try {
+      const url = `${API_BASE}/api/booked-slots?date=${encodeURIComponent(bookingData.date)}&location=${encodeURIComponent(bookingData.location)}`;
 
-    const res = await fetch(url);
-    const text = await res.text();
+      const res = await fetch(url);
+      const text = await res.text();
 
-    if (!res.ok) {
-      console.error("❌ booked-slots raw response:", text);
+      if (!res.ok) {
+        console.error("❌ booked-slots raw response:", text);
+        bookedSlots = [];
+        return;
+      }
+
+      const data = JSON.parse(text);
+      bookedSlots = data.slots || [];
+      console.log("✅ Booked slots:", bookedSlots);
+
+    } catch (err) {
+      console.error("❌ Error loading booked slots:", err);
       bookedSlots = [];
-      return;
     }
-
-    const data = JSON.parse(text);
-    bookedSlots = data.slots || [];
-    console.log("✅ Booked slots:", bookedSlots);
-
-  } catch (err) {
-    console.error("❌ Error loading booked slots:", err);
-    bookedSlots = [];
   }
-}
+
   /* ---------------- RENDER SLOTS ---------------- */
   function renderSlots() {
     slotsContainer.innerHTML = "";
@@ -143,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
               slot: selectedSlotId,
               vehicle: bookingData.vehicle,
               date: bookingData.date,
+              time: bookingData.time,
               location: bookingData.location,
               latitude: position.coords.latitude,
               longitude: position.coords.longitude
@@ -150,18 +152,19 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           const text = await res.text();
-console.log("RAW confirm-booking response:", text);
+          console.log("RAW confirm-booking response:", text);
 
-let data;
-try {
-  data = JSON.parse(text);
-} catch (e) {
-  throw new Error("Server returned invalid response");
-}
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            throw new Error("Server returned invalid response");
+          }
 
-if (!res.ok) {
-  throw new Error(data.error || "Booking failed");
-}
+          if (!res.ok) {
+            throw new Error(data.error || "Booking failed");
+          }
+
           console.log("✅ Booking Success:", data);
 
           localStorage.setItem("ticketData", JSON.stringify({
