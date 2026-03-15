@@ -1,4 +1,4 @@
-import { auth } from "../js/firebase.js";
+import { auth } from "firebase.js";
 import {
   onAuthStateChanged,
   signOut,
@@ -42,7 +42,7 @@ logoutBtn?.addEventListener("click", async () => {
   try {
     await signOut(auth);
     alert("Logged out successfully");
-    window.location.href = "../html/login.html";
+    window.location.href = "login.html";
   } catch (error) {
     console.error(error);
   }
@@ -50,7 +50,7 @@ logoutBtn?.addEventListener("click", async () => {
 
 /* ---------------- BOOK NOW BUTTON ---------------- */
 document.getElementById("bookNowBtn")?.addEventListener("click", () => {
-  window.location.href = "../html/book.html";
+  window.location.href = "book.html";
 });
 
 
@@ -129,7 +129,7 @@ searchBtn?.addEventListener("click", (event) => {
 
     alert("✅ Hourly Booking Saved!");
 
-    window.location.href = "../html/slot.html";
+    window.location.href = "slot.html";
   }
 
   /* ===============================
@@ -153,7 +153,7 @@ searchBtn?.addEventListener("click", (event) => {
     alert("✅ Monthly Package Selected!");
 
     /* ✅ Redirect to Separate Monthly Page */
-    window.location.href = "../html/monthly-booking.html";
+    window.location.href = "monthly-booking.html";
   }
 });
 
