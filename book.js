@@ -19,7 +19,7 @@ function setupAccountAvatar(user) {
   userInfo.style.display = "flex";
   dropdownEmail.textContent = user.email;
   dropdownUID.textContent = user.uid;
-  avatar.src = user.photoURL || "../html/user.png";
+  avatar.src = user.photoURL || "user.png";
 
   avatar.onclick = (e) => {
     e.stopPropagation();
@@ -32,7 +32,7 @@ function setupAccountAvatar(user) {
 
   logoutBtn.onclick = async () => {
     await signOut(auth);
-    window.location.href = "../html/login.html";
+    window.location.href = "login.html";
   };
 }
 
