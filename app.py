@@ -39,20 +39,40 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+@app.after_request
+def after_request(response):
+    origin = request.headers.get("Origin")
+    allowed_origins = [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "https://surya-wd.github.io",
+        "https://suryanarayanabca.github.io"
+    ]
+
+    if origin in allowed_origins:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+
+    return response
+
 CORS(
     app,
-    resources={r"/api/*": {
-        "origins": [
-            "http://localhost:5500",
-            "http://127.0.0.1:5500",
-            "https://surya-wd.github.io"
-        ]
-    }},
-    supports_credentials=True,
-    allow_headers=["Authorization", "Content-Type"],
-    methods=["GET", "POST", "OPTIONS"]
+    resources={
+        r"/api/*": {
+            "origins": [
+                "http://localhost:5500",
+                "http://127.0.0.1:5500",
+                "https://surya-wd.github.io",
+                "https://suryanarayanabca.github.io"
+            ],
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    },
+    supports_credentials=True
 )
-
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({
@@ -185,8 +205,10 @@ Your parking booking is confirmed.<br><br>
 # =========================================================
 # BOOKED SLOTS
 # =========================================================
-@app.route("/api/confirm-booking", methods=["POST"])
+@app.route("/api/confirm-booking", methods=["POST", "OPTIONS"])
 def confirm_booking():
+        if request.method == "OPTIONS":
+        return jsonify({"ok": True}), 200
     try:
         decoded, error = verify_token()
         if error:
@@ -253,8 +275,10 @@ def confirm_booking():
 # =========================================================
 # BOOKED SLOTS
 # =========================================================
-@app.route("/api/booked-slots", methods=["GET"])
+@app.route("/api/booked-slots", methods=["GET", "OPTIONS"])
 def booked_slots():
+        if request.method == "OPTIONS":
+        return jsonify({"ok": True}), 200
     try:
         date = request.args.get("date")
         location = request.args.get("location")
