@@ -2,7 +2,7 @@ const ticket = JSON.parse(localStorage.getItem("monthlyTicket"));
 
 if (!ticket) {
   alert("⚠ No Ticket Found!");
-  window.location.href = "../html/dashboard.html";
+  window.location.href = "dashboard.html";
 }
 
 /* Show Ticket Data */
