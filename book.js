@@ -1,4 +1,4 @@
-import { auth } from "../js/firebase.js";
+import { auth } from "firebase.js";
 import {
   onAuthStateChanged,
   signOut
@@ -39,7 +39,7 @@ function setupAccountAvatar(user) {
 /* ---------------- AUTH CHECK ---------------- */
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "../html/login.html";
+    window.location.href = "login.html";
     return;
   }
 
@@ -68,5 +68,5 @@ checkBtn.addEventListener("click", (e) => {
     email: auth.currentUser.email
   }));
 
-  window.location.href = "../html/slot.html";
+  window.location.href = "slot.html";
 });
