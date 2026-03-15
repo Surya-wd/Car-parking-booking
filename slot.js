@@ -67,28 +67,28 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ---------------- LOAD BOOKED SLOTS ---------------- */
-  async function loadBookedSlots() {
-    try {
-      const url = `${API_BASE}/api/booked-slots?date=${encodeURIComponent(bookingData.date)}&location=${encodeURIComponent(bookingData.location)}`;
+ async function loadBookedSlots() {
+  try {
+    const url = `${API_BASE}/api/booked-slots?date=${encodeURIComponent(bookingData.date)}&location=${encodeURIComponent(bookingData.location)}`;
 
-      const res = await fetch(url);
+    const res = await fetch(url);
+    const text = await res.text();
 
-      if (!res.ok) {
-        console.warn("⚠ booked-slots API error");
-        bookedSlots = [];
-        return;
-      }
-
-      const data = await res.json();
-      bookedSlots = data.slots || [];
-      console.log("✅ Booked slots:", bookedSlots);
-
-    } catch (err) {
-      console.error("❌ Error loading booked slots:", err);
+    if (!res.ok) {
+      console.error("❌ booked-slots raw response:", text);
       bookedSlots = [];
+      return;
     }
-  }
 
+    const data = JSON.parse(text);
+    bookedSlots = data.slots || [];
+    console.log("✅ Booked slots:", bookedSlots);
+
+  } catch (err) {
+    console.error("❌ Error loading booked slots:", err);
+    bookedSlots = [];
+  }
+}
   /* ---------------- RENDER SLOTS ---------------- */
   function renderSlots() {
     slotsContainer.innerHTML = "";
