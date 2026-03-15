@@ -26,7 +26,7 @@ const monthlyBookingsTable = document.getElementById("monthlyBookingsTable");
 ======================= */
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "../html/login.html";
+    window.location.href = "login.html";
     return;
   }
   await showBookings();
@@ -262,5 +262,5 @@ window.showCustomers = async () => {
 ======================= */
 window.logout = async () => {
   await auth.signOut();
-  window.location.href = "../html/login.html";
+  window.location.href = "login.html";
 };
