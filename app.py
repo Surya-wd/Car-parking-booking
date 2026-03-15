@@ -35,6 +35,8 @@ import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 import base64
 # ---------------- APP SETUP ----------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 app = Flask(__name__)
 
 CORS(
@@ -43,7 +45,6 @@ CORS(
         "origins": [
             "http://localhost:5500",
             "http://127.0.0.1:5500",
-            "https://your-frontend-site.netlify.app",
             "https://surya-wd.github.io"
         ]
     }},
@@ -51,6 +52,13 @@ CORS(
     allow_headers=["Authorization", "Content-Type"],
     methods=["GET", "POST", "OPTIONS"]
 )
+
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "status": "Backend running successfully",
+        "service": "ParkSmart API"
+    })
 # ---------------- FIREBASE INIT ----------------
 firebase_json = os.getenv("FIREBASE_CREDENTIALS")
 if not firebase_json:
