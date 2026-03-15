@@ -1,3 +1,5 @@
+const API_BASE = "https://car-parking-booking-production.up.railway.app";
+
 const ticket = JSON.parse(localStorage.getItem("monthlyTicket"));
 
 if (!ticket) {
@@ -22,7 +24,7 @@ document.getElementById("days").innerText = ticket.totalDays + " Days";
 /* Download PDF */
 document.getElementById("downloadBtn").onclick = () => {
   window.open(
-    `http://127.0.0.1:5000/api/monthly-ticket-pdf/${ticket.monthlyId}`,
+    `${API_BASE}/api/monthly-ticket-pdf/${ticket.monthlyId}`,
     "_blank"
   );
 };
