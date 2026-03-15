@@ -197,10 +197,21 @@ def confirm_booking():
         if not data:
             return jsonify({"error": "No data received"}), 400
 
-        required_fields = ["slot", "vehicle", "location", "latitude", "longitude", "date"]
+        required_fields = ["slot", "vehicle", "location", "latitude", "longitude", "date", "time"]
         for field in required_fields:
             if data.get(field) in [None, ""]:
                 return jsonify({"error": f"{field} is required"}), 400
+
+        selected_date = data.get("date")
+        selected_time = data.get("time")
+
+        try:
+            selected_entry_time = datetime.strptime(
+                f"{selected_date} {selected_time}",
+                "%Y-%m-%d %H:%M"
+            )
+        except ValueError:
+            return jsonify({"error": "Invalid date or time format"}), 400
 
         db = get_db()
         cursor = db.cursor()
@@ -210,7 +221,7 @@ def confirm_booking():
             (firebase_uid, slot_no, vehicle_no, location,
              latitude, longitude,
              booking_date, created_at, entry_time)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,NOW(),NOW())
+            VALUES (%s,%s,%s,%s,%s,%s,%s,NOW(),%s)
         """, (
             decoded["uid"],
             data["slot"],
@@ -218,7 +229,8 @@ def confirm_booking():
             data["location"],
             data["latitude"],
             data["longitude"],
-            data["date"]
+            selected_date,
+            selected_entry_time
         ))
 
         db.commit()
@@ -626,7 +638,6 @@ def admin_revoke_booking():
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
-    # 🔹 Fetch active booking
     cursor.execute("""
         SELECT entry_time
         FROM bookings
@@ -642,22 +653,23 @@ def admin_revoke_booking():
     entry_time = booking["entry_time"]
     exit_time = datetime.now()
 
-    # ⏱️ Duration calculation
     duration_seconds = (exit_time - entry_time).total_seconds()
-    total_hours = int(duration_seconds // 3600)
 
-    # round up
-    if duration_seconds % 3600 != 0:
-        total_hours += 1
+    if duration_seconds <= 0:
+        total_hours = 0
+        parking_amount = 0
+    else:
+        total_hours = int(duration_seconds // 3600)
 
-    if total_hours == 0:
-        total_hours = 1
+        if duration_seconds % 3600 != 0:
+            total_hours += 1
 
-    # 💰 Pricing (change later if needed)
-    RATE_PER_HOUR = 50
-    parking_amount = total_hours * RATE_PER_HOUR
+        if total_hours == 0:
+            total_hours = 1
 
-    # 🔁 Update booking
+        RATE_PER_HOUR = 50
+        parking_amount = total_hours * RATE_PER_HOUR
+
     cursor.execute("""
         UPDATE bookings
         SET exit_time = %s,
@@ -684,8 +696,6 @@ def admin_revoke_booking():
         "total_hours": total_hours,
         "amount": parking_amount
     }), 200
-
-
 def send_ticket_email(to_email, subject, body, attachment_path=None):
     try:
         sender = {
