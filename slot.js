@@ -1,6 +1,6 @@
 // slot.js (FINAL CLEAN VERSION – BACKEND EMAIL ONLY)
 
-import { auth } from "firebase.js";
+import { auth } from "./firebase.js";
 import {
   onAuthStateChanged,
   signOut
