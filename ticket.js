@@ -2,6 +2,8 @@ import { auth } from "./firebase.js";
 import { onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+const API_BASE = "https://car-parking-booking-production.up.railway.app";
+
 /* =====================================================
    LOAD TICKET DATA SAFELY
 ===================================================== */
@@ -86,16 +88,19 @@ if (downloadBtn) {
         return;
       }
 
-      const res = await fetch(
-        `http://localhost:5000/api/ticket-pdf/${ticketData.ticketId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${firebaseToken}`
-          }
-        }
-      );
+      const pdfUrl =
+        ticketData.downloadUrl ||
+        `${API_BASE}/api/ticket-pdf/${ticketData.ticketId}`;
 
-      if (!res.ok) throw new Error("PDF generation failed");
+      const res = await fetch(pdfUrl, {
+        headers: firebaseToken
+          ? { Authorization: `Bearer ${firebaseToken}` }
+          : {}
+      });
+
+      if (!res.ok) {
+        throw new Error("PDF generation failed");
+      }
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -123,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const qrContainer = document.getElementById("qrcode");
 
   if (qrContainer && window.QRCode && ticketData.ticketId) {
-    const scanUrl = `http://localhost:5000/ticket/${ticketData.ticketId}`;
+    const scanUrl = `${API_BASE}/api/ticket-pdf/${ticketData.ticketId}`;
 
     new QRCode(qrContainer, {
       text: scanUrl,
