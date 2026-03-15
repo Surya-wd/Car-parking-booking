@@ -327,10 +327,12 @@ def ticket_pdf(ticket_id):
     c.showPage()
     c.save()
 
-    
-
-    return send_file(pdf_path, as_attachment=True)
-
+    return send_file(
+    pdf_path,
+    as_attachment=True,
+    download_name=f"ticket_{ticket_id}.pdf",
+    mimetype="application/pdf"
+)
 
 # =========================================================
 # MONTHLY TICKET PDF (MAP QR)
@@ -592,7 +594,127 @@ Your Monthly Pass PDF is attached.
         print("Monthly email error:", e)
 
     return pdf_path
+    @app.route("/api/monthly-ticket-pdf/<int:monthly_id>", methods=["GET"])
+def monthly_ticket_pdf(monthly_id):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM monthly_bookings WHERE id=%s", (monthly_id,))
+    booking = cursor.fetchone()
+    cursor.close()
+    db.close()
 
+    if not booking:
+        return jsonify({"error": "Monthly ticket not found"}), 404
+
+    map_link = f"https://www.google.com/maps?q={booking['latitude']},{booking['longitude']}"
+
+    monthly_dir = os.path.join(BASE_DIR, "monthly_tickets")
+    qr_dir = os.path.join(BASE_DIR, "monthly_qr_codes")
+    os.makedirs(monthly_dir, exist_ok=True)
+    os.makedirs(qr_dir, exist_ok=True)
+
+    pdf_path = os.path.join(monthly_dir, f"monthly_ticket_{monthly_id}.pdf")
+    qr_path = os.path.join(qr_dir, f"monthly_qr_{monthly_id}.png")
+
+    qrcode.make(map_link).save(qr_path)
+
+    doc = SimpleDocTemplate(
+        pdf_path,
+        pagesize=A4,
+        rightMargin=30,
+        leftMargin=30,
+        topMargin=30,
+        bottomMargin=30
+    )
+
+    styles = getSampleStyleSheet()
+    elements = []
+
+    header_data = [[
+        Paragraph(
+            "<font size=20 color='white'><b>ParkSmart Monthly Pass</b></font>",
+            styles["Normal"]
+        )
+    ]]
+
+    header_table = Table(header_data, colWidths=[6.7 * inch])
+    header_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#0f172a")),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 18),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 18),
+    ]))
+
+    elements.append(header_table)
+    elements.append(Spacer(1, 15))
+
+    status_color = "#16a34a" if booking.get("payment_status", "Paid") == "Paid" else "#dc2626"
+
+    id_status_table = Table([[
+        Paragraph(f"<b>Ticket ID:</b> #{booking['id']}", styles["Normal"]),
+        Paragraph(f"<b>Status:</b> <font color='{status_color}'>PAID</font>", styles["Normal"])
+    ]], colWidths=[3.3 * inch, 3.4 * inch])
+
+    elements.append(id_status_table)
+    elements.append(Spacer(1, 15))
+
+    data = [
+        ["Customer", booking["customer_name"], "Vehicle", booking["vehicle_no"]],
+        ["Phone", booking["phone_no"], "Location", booking["location"]],
+        ["Duration", f"{booking['package_months']} Months", "Amount", f"₹ {booking['amount']}"],
+        ["Start", str(booking["start_date"]), "End", str(booking["end_date"])],
+    ]
+
+    details_table = Table(data, colWidths=[1.3*inch, 2.0*inch, 1.3*inch, 2.1*inch])
+    details_table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,-1), colors.whitesmoke),
+        ("GRID", (0,0), (-1,-1), 0.4, colors.HexColor("#d1d5db")),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("LEFTPADDING", (0,0), (-1,-1), 8),
+        ("RIGHTPADDING", (0,0), (-1,-1), 8),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+    ]))
+
+    elements.append(details_table)
+    elements.append(Spacer(1, 20))
+
+    elements.append(Paragraph(
+        "<b>Scan to View Parking Location</b>",
+        ParagraphStyle(name="CenterQR", alignment=1)
+    ))
+    elements.append(Spacer(1, 10))
+
+    qr_image = Image(qr_path, width=2.5 * inch, height=2.5 * inch)
+    qr_wrapper = Table([[qr_image]], colWidths=[6.7 * inch])
+    qr_wrapper.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER")
+    ]))
+
+    elements.append(qr_wrapper)
+    elements.append(Spacer(1, 10))
+
+    elements.append(Paragraph(
+        f'<a href="{map_link}">Open Location in Google Maps</a>',
+        ParagraphStyle(name="MapLink", alignment=1, textColor=colors.blue, fontSize=9)
+    ))
+
+    elements.append(Spacer(1, 20))
+
+    elements.append(Paragraph(
+        "Thank you for choosing ParkSmart • support@parksmart.com",
+        ParagraphStyle(name="Footer", alignment=1, fontSize=8, textColor=colors.grey)
+    ))
+
+    doc.build(elements)
+
+    return send_file(
+        pdf_path,
+        as_attachment=True,
+        download_name=f"monthly_ticket_{monthly_id}.pdf",
+        mimetype="application/pdf"
+    )
 
 # =========================================================
 # ADMIN APIs (UNCHANGED)
