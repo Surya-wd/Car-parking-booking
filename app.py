@@ -187,71 +187,86 @@ Your parking booking is confirmed.<br><br>
 # =========================================================
 @app.route("/api/confirm-booking", methods=["POST"])
 def confirm_booking():
+    try:
+        decoded, error = verify_token()
+        if error:
+            return jsonify({"error": error[0]}), error[1]
 
-    decoded, error = verify_token()
-    if error:
-        return jsonify({"error": error[0]}), error[1]
+        data = request.get_json()
 
-    data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data received"}), 400
 
-    db = get_db()
-    cursor = db.cursor()
+        required_fields = ["slot", "vehicle", "location", "latitude", "longitude", "date"]
+        for field in required_fields:
+            if data.get(field) in [None, ""]:
+                return jsonify({"error": f"{field} is required"}), 400
 
-    cursor.execute("""
-        INSERT INTO bookings
-        (firebase_uid, slot_no, vehicle_no, location,
-         latitude, longitude,
-         booking_date, created_at, entry_time)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,NOW(),NOW())
-    """, (
-        decoded["uid"],
-        data["slot"],
-        data["vehicle"],
-        data["location"],
-        data["latitude"],
-        data["longitude"],
-        data["date"]
-    ))
+        db = get_db()
+        cursor = db.cursor()
 
-    db.commit()
+        cursor.execute("""
+            INSERT INTO bookings
+            (firebase_uid, slot_no, vehicle_no, location,
+             latitude, longitude,
+             booking_date, created_at, entry_time)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,NOW(),NOW())
+        """, (
+            decoded["uid"],
+            data["slot"],
+            data["vehicle"],
+            data["location"],
+            data["latitude"],
+            data["longitude"],
+            data["date"]
+        ))
 
-    ticket_id = cursor.lastrowid
-    cursor.close()
-    db.close()
+        db.commit()
 
-    # ✅ Generate PDF + Send Email
-    generate_ticket_pdf_and_send_email(ticket_id)
+        ticket_id = cursor.lastrowid
+        cursor.close()
+        db.close()
 
-    return jsonify({
-    "success": True,
-    "ticket_id": ticket_id,
-    "download_url": f"{request.host_url}api/ticket-pdf/{ticket_id}"
-}), 201
+        generate_ticket_pdf_and_send_email(ticket_id)
+
+        return jsonify({
+            "success": True,
+            "ticket_id": ticket_id,
+            "download_url": f"{request.host_url.rstrip('/')}/api/ticket-pdf/{ticket_id}"
+        }), 201
+
+    except Exception as e:
+        print("❌ confirm_booking error:", e)
+        return jsonify({"error": str(e)}), 500
 # =========================================================
 # BOOKED SLOTS
 # =========================================================
 @app.route("/api/booked-slots", methods=["GET"])
 def booked_slots():
-    date = request.args.get("date")
-    location = request.args.get("location")
+    try:
+        date = request.args.get("date")
+        location = request.args.get("location")
 
-    if not date or not location:
-        return jsonify({"error": "Date and location required"}), 400
+        if not date or not location:
+            return jsonify({"error": "Date and location required"}), 400
 
-    db = get_db()
-    cursor = db.cursor()
+        db = get_db()
+        cursor = db.cursor()
 
-    cursor.execute("""
-        SELECT slot_no FROM bookings
-        WHERE booking_date=%s AND location=%s AND exit_time IS NULL
-    """, (date, location))
+        cursor.execute("""
+            SELECT slot_no FROM bookings
+            WHERE booking_date=%s AND location=%s AND exit_time IS NULL
+        """, (date, location))
 
-    slots = [row[0] for row in cursor.fetchall()]
-    cursor.close()
-    db.close()
+        slots = [row[0] for row in cursor.fetchall()]
+        cursor.close()
+        db.close()
 
-    return jsonify({"slots": slots}), 200
+        return jsonify({"slots": slots}), 200
 
+    except Exception as e:
+        print("❌ booked_slots error:", e)
+        return jsonify({"error": str(e)}), 500
 # =========================================================
 # HOURLY TICKET PDF (MAP QR + AUTO EMAIL)
 # =========================================================
@@ -706,7 +721,18 @@ def send_ticket_email(to_email, subject, body, attachment_path=None):
         print("❌ Brevo Error:", e)
 
 
+# ---------------- GLOBAL ERROR HANDLER ----------------
+@app.errorhandler(Exception)
+def handle_exception(e):
+    print("🔥 Server Error:", str(e))
+    return jsonify({
+        "error": "Internal Server Error",
+        "message": str(e)
+    }), 500
+
+
 # ---------------- RUN SERVER ----------------
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 
